@@ -96,3 +96,4 @@ public class Bahnhof {
   		    + this.getZugartenAlsString('_');
   	}
 	// Ende: Überarbeitung
+}
