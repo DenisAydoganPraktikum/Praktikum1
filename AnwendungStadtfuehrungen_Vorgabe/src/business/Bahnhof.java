@@ -58,6 +58,9 @@ public class Bahnhof {
 	}
 	
  	public String getZugartenAlsString(char trenner) {
+ 		if (zugarten == null || zugarten.length == 0) {
+            return "";
+        }
 		String ergebnis = "";
 		int i = 0;
 		for(i = 0; i < this.getZugarten().length - 1; i++) {
@@ -66,12 +69,31 @@ public class Bahnhof {
 		return ergebnis	+ this.getZugarten()[i];
 	}
 	
+ 	// --- Start: Überarbeitete Methoden ---
+ 	
+ 	/**
+ 	 * Erstellt einen String mit Zeilenumbrüchen für die Anzeige im Textfeld.
+ 	 * Der übergebene Trenner wird ignoriert.
+ 	 */
 	public String gibBahnhofZurueck(char trenner){
-  		return this.getName() + trenner 
-  			+ this.getOrt() + trenner
-  			+ this.getAnzahlGleise() + trenner
-  		    + this.getLetzteRenovierung() + trenner + "\n"
-  		    + this.getZugartenAlsString(trenner) + "\n";
+  		return "Name: " + this.getName() + "\n" 
+  			+ "Ort: " + this.getOrt() + "\n"
+  			+ "Anzahl Gleise: " + this.getAnzahlGleise() + "\n"
+  		    + "Letzte Renov.: " + this.getLetzteRenovierung() + "\n"
+  		    + "Zugarten: " + this.getZugartenAlsString(' '); // Zugarten mit Leerzeichen trennen
   	}
+	
+	/**
+ 	 * Erstellt einen String in einer Zeile für den CSV-Export.
+ 	 * (Passend zum CSV-Importformat)
+ 	 */
+	public String gibBahnhofZurueckFuerCsv(){
+		// Verwendet ';' als Feldtrenner und '_' als Trenner für Zugarten
+  		return this.getName() + ";" 
+  			+ this.getOrt() + ";"
+  			+ this.getAnzahlGleise() + ";"
+  		    + this.getLetzteRenovierung() + ";"
+  		    + this.getZugartenAlsString('_');
+  	}
+	// --- Ende: Überarbeitung ---
 }
-
