@@ -22,7 +22,7 @@ public class BahnhofControl {
     public void nehmeBahnhofAuf(String name, String ort, String anzahlGleiseStr, String letzteRenovierungStr, String zugartenStr)
     {
     	try {
-    		// --- Start: Validierung (deine Anforderung) ---
+    		// Start: Validierung ( Anforderung) 
     		if (name == null || name.isEmpty()) {
                 throw new PlausiException(PlausiException.FORMAL, "Name");
             }
@@ -38,9 +38,9 @@ public class BahnhofControl {
             if (zugartenStr == null || zugartenStr.isEmpty()) {
                 throw new PlausiException(PlausiException.FORMAL, "Zugarten");
             }
-            // --- Ende: Validierung ---
+            //  Ende: Validierung 
 
-            // --- Start: Parsing (Umwandlung) ---
+            //  Start: Parsing (Umwandlung) 
             int anzahlGleise;
             try {
                 anzahlGleise = Integer.parseInt(anzahlGleiseStr);
@@ -56,9 +56,9 @@ public class BahnhofControl {
             }
             
             String[] zugarten = zugartenStr.split(";"); // Trennt am Semikolon (wie im UI-Label)
-            // --- Ende: Parsing ---
+            //  Ende: Parsing 
     		
-    		// --- Start: Model aktualisieren ---
+    		//  Start: Model aktualisieren 
 			model.setBahnhof(new Bahnhof(name, ort, anzahlGleise, letzteRenovierung, zugarten));
 			view.zeigeInformationsfensterAn("Der Bahnhof wurde aufgenommen!");
 			// --- Ende: Model aktualisieren ---
@@ -99,8 +99,8 @@ public class BahnhofControl {
     		 view.zeigeFehlermeldungsfensterAn("Allgemeiner Fehler", "Unbekannter Fehler beim Speichern: " + exc.getMessage());
     	 }
     }
-    
-    // --- Start: Neue Methode für Import ---
+   
+    //  Start: Neue Methode für Import 
     public void leseBahnhofAusDatei(String typ) {
         try {
             if ("csv".equals(typ)) {
@@ -119,5 +119,5 @@ public class BahnhofControl {
             view.zeigeFehlermeldungsfensterAn("Allgemeiner Fehler", "Unbekannter Fehler beim Importieren: " + exc.getMessage());
         }
     }
-    // --- Ende: Neue Methode ---
+    //  Ende: Neue Methode 
 }

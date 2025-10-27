@@ -17,12 +17,12 @@ public class BahnhofView {
 	private BahnhofControl control;
 	private BahnhofModel model;
 	
-	//---Anfang Attribute der grafischen Oberflaeche---
+	//Anfang Attribute der grafischen Oberflaeche
     private Pane pane     				= new  Pane();
     private Label lblEingabe    	 	= new Label("Eingabe");
     private Label lblAnzeige   	 	    = new Label("Anzeige");
     private Label lblName 				= new Label("Name:");
-    // --- Start: Korrigierte Labels und Felder ---
+    //  Start: Korrigierte Labels und Felder 
     private Label lblOrt   		 		= new Label("Ort:");
     private Label lblAnzahlGleise  	 	= new Label("Anzahl Gleise:");
     private Label lblLetzteRenovierung   = new Label("Letzte Renovierung:");
@@ -32,19 +32,19 @@ public class BahnhofView {
     private TextField txtAnzahlGleise	= new TextField();
     private TextField txtLetzteRenovierung = new TextField();
     private TextField txtZugarten	 	= new TextField();
-    // --- Ende: Korrektur ---
+    // Ende: Korrektur 
     private TextArea txtAnzeige  		= new TextArea();
     private Button btnEingabe 		 	= new Button("Eingabe");
     private Button btnAnzeige 		 	= new Button("Anzeige");
     private MenuBar mnbrMenuLeiste  	= new MenuBar();
     private Menu mnDatei             	= new Menu("Datei");
-    // --- Start: Hinzugefügte Menü-Items ---
+    //  Start: Hinzugefügte Menü-Items 
     private MenuItem mnItmCsvImport 	= new MenuItem("csv-Import");
     private MenuItem mnItmTxtImport 	= new MenuItem("txt-Import");
-    // --- Ende: Hinzugefügt ---
+    //  Ende: Hinzugefügt 
     private MenuItem mnItmCsvExport 	= new MenuItem("csv-Export");
     private MenuItem mnItmTxtExport 	= new MenuItem("txt-Export");
-    //-------Ende Attribute der grafischen Oberflaeche-------
+    //Ende Attribute der grafischen Oberflaeche
 	
     
     public BahnhofView(BahnhofControl control, Stage primaryStage, BahnhofModel model)
@@ -134,7 +134,7 @@ public class BahnhofView {
 	    btnEingabe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-            	// --- Start: Korrektur ---
+            	//  Start: Korrektur 
             	// Übergibt ALLE Textfelder an den Controller
         	    control.nehmeBahnhofAuf(
         	    	txtName.getText(), 
@@ -143,7 +143,7 @@ public class BahnhofView {
         	    	txtLetzteRenovierung.getText(),
         	    	txtZugarten.getText()
         	    );
-        	    // --- Ende: Korrektur ---
+        	    //  Ende: Korrektur 
             }
 	    });
 	    btnAnzeige.setOnAction(new EventHandler<ActionEvent>() {
@@ -153,7 +153,7 @@ public class BahnhofView {
 	        } 
    	    });
 	    
-	    // --- Start: Hinzugefügte Listener ---
+	    //  Start: Hinzugefügte Listener 
 	    mnItmCsvImport.setOnAction(new EventHandler<ActionEvent>() {
 	    	@Override
 	        public void handle(ActionEvent e) {
@@ -166,7 +166,7 @@ public class BahnhofView {
 		    	control.leseBahnhofAusDatei("txt");
 		    }
     	});
-    	// --- Ende: Hinzugefügte Listener ---
+    	// Ende: Hinzugefügte Listener 
     	
 	    mnItmCsvExport.setOnAction(new EventHandler<ActionEvent>() {
 	    	 @Override

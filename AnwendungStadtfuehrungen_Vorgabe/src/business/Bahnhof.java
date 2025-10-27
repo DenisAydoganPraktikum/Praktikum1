@@ -69,7 +69,7 @@ public class Bahnhof {
 		return ergebnis	+ this.getZugarten()[i];
 	}
 	
- 	// --- Start: Überarbeitete Methoden ---
+ 	//  Start: Überarbeitete Methoden 
  	
  	/**
  	 * Erstellt einen String mit Zeilenumbrüchen für die Anzeige im Textfeld.
@@ -95,5 +95,4 @@ public class Bahnhof {
   		    + this.getLetzteRenovierung() + ";"
   		    + this.getZugartenAlsString('_');
   	}
-	// --- Ende: Überarbeitung ---
-}
+	// Ende: Überarbeitung
