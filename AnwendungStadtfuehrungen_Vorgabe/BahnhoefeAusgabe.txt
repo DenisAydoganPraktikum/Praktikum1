@@ -1,0 +1,70 @@
+--- Daten des Bahnhofs ---
+Name des Bahnhofs: fdf
+Ort des Bahnhofs: dfd
+Anzahl Gleise: 34
+Letzte Renovierung: 23
+Zugarten: erfe sfasf
+--------------------------
+--- Daten des Bahnhofs ---
+Name des Bahnhofs: der
+Ort des Bahnhofs: er
+Anzahl Gleise: 343
+Letzte Renovierung: 343
+Zugarten: fdffdsdf eer
+--------------------------
+--- Daten des Bahnhofs ---
+Name des Bahnhofs: der
+Ort des Bahnhofs: er
+Anzahl Gleise: 343
+Letzte Renovierung: 343
+Zugarten: fdffdsdf eer
+--------------------------
+--- Daten des Bahnhofs ---
+Name des Bahnhofs: ferfer
+Ort des Bahnhofs: eere
+Anzahl Gleise: 4344
+Letzte Renovierung: 4432
+Zugarten: ICE Re
+--------------------------
+--- Daten des Bahnhofs ---
+Name des Bahnhofs: dsf
+Ort des Bahnhofs: er
+Anzahl Gleise: 54454
+Letzte Renovierung: 454
+Zugarten: 33434 344323
+--------------------------
+--- Daten des Bahnhofs ---
+Name des Bahnhofs: dsf
+Ort des Bahnhofs: er
+Anzahl Gleise: 54454
+Letzte Renovierung: 454
+Zugarten: 33434 344323
+--------------------------
+--- Daten des Bahnhofs ---
+Name des Bahnhofs: dffd
+Ort des Bahnhofs: dfs4
+Anzahl Gleise: 4545
+Letzte Renovierung: 455
+Zugarten: 34234 342343
+--------------------------
+--- Daten des Bahnhofs ---
+Name des Bahnhofs: dffd
+Ort des Bahnhofs: dfs4
+Anzahl Gleise: 4545
+Letzte Renovierung: 455
+Zugarten: 34234 342343
+--------------------------
+--- Daten des Bahnhofs ---
+Name des Bahnhofs: f
+Ort des Bahnhofs: fd
+Anzahl Gleise: 33
+Letzte Renovierung: 3244
+Zugarten: ice
+--------------------------
+--- Daten des Bahnhofs ---
+Name des Bahnhofs: ss
+Ort des Bahnhofs: sdassa
+Anzahl Gleise: 33
+Letzte Renovierung: 342
+Zugarten: ICE RE
+--------------------------

@@ -5,7 +5,7 @@ import business.BahnhofModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.*; // Importiert
+import javafx.scene.control.*; 
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
@@ -17,57 +17,55 @@ public class BahnhofView {
 	private BahnhofControl control;
 	private BahnhofModel model;
 	
-	//Anfang Attribute der grafischen Oberflaeche
+	// Hier werden die Attribute der grafischen Oberflaeche deklariert
     private Pane pane     				= new  Pane();
     private Label lblEingabe    	 	= new Label("Eingabe");
     private Label lblAnzeige   	 	    = new Label("Anzeige");
     private Label lblName 				= new Label("Name:");
-    //  Start: Korrigierte Labels und Felder 
     private Label lblOrt   		 		= new Label("Ort:");
     private Label lblAnzahlGleise  	 	= new Label("Anzahl Gleise:");
     private Label lblLetzteRenovierung   = new Label("Letzte Renovierung:");
-    private Label lblZugarten  			= new Label("Zugarten (mit ;):");
+    private Label lblZugarten  			= new Label("Zugarten mit ;:");
     private TextField txtName 	 		= new TextField();
     private TextField txtOrt			= new TextField();
     private TextField txtAnzahlGleise	= new TextField();
     private TextField txtLetzteRenovierung = new TextField();
     private TextField txtZugarten	 	= new TextField();
-    // Ende: Korrektur 
     private TextArea txtAnzeige  		= new TextArea();
     private Button btnEingabe 		 	= new Button("Eingabe");
     private Button btnAnzeige 		 	= new Button("Anzeige");
     private MenuBar mnbrMenuLeiste  	= new MenuBar();
     private Menu mnDatei             	= new Menu("Datei");
-    //  Start: Hinzugefügte Menü-Items 
+    
     private MenuItem mnItmCsvImport 	= new MenuItem("csv-Import");
     private MenuItem mnItmTxtImport 	= new MenuItem("txt-Import");
-    //  Ende: Hinzugefügt 
     private MenuItem mnItmCsvExport 	= new MenuItem("csv-Export");
     private MenuItem mnItmTxtExport 	= new MenuItem("txt-Export");
-    //Ende Attribute der grafischen Oberflaeche
 	
-    
+    // Hier wird die View initialisiert
     public BahnhofView(BahnhofControl control, Stage primaryStage, BahnhofModel model)
     {
     	this.control = control;
     	this.model = model;
     	
-    	Scene scene = new Scene(this.pane, 700, 340); // Breite angepasst
+    	Scene scene = new Scene(this.pane, 700, 340); 
     	primaryStage.setScene(scene);
+        // Hier wird der Fenstertitel aus dem Model abgerufen
     	primaryStage.setTitle(this.model.getUeberschrift());
     	primaryStage.show();
     	this.initKomponenten();
 		this.initListener();
     }
     
+    // Hier werden die Komponenten positioniert und zur Oberfläche hinzugefügt
     private void initKomponenten(){
-    	// Labels
+    	// Hier werden Labels und deren Positionen gesetzt
        	lblEingabe.setLayoutX(20);
     	lblEingabe.setLayoutY(40);
     	Font font = new Font("Arial", 24);
     	lblEingabe.setFont(font);
     	lblEingabe.setStyle("-fx-font-weight: bold;"); 
-    	lblAnzeige.setLayoutX(400); // Position angepasst
+    	lblAnzeige.setLayoutX(400); 
     	lblAnzeige.setLayoutY(40);
       	lblAnzeige.setFont(font);
        	lblAnzeige.setStyle("-fx-font-weight: bold;"); 
@@ -85,8 +83,8 @@ public class BahnhofView {
        		lblName, lblOrt, lblAnzahlGleise,
        		lblLetzteRenovierung, lblZugarten);
     
-    	// Textfelder
-     	txtName.setLayoutX(170); // Position angepasst
+    	// Hier werden Textfelder und deren Positionen gesetzt
+     	txtName.setLayoutX(170); 
     	txtName.setLayoutY(90);
     	txtName.setPrefWidth(200);
     	txtOrt.setLayoutX(170);
@@ -105,37 +103,43 @@ public class BahnhofView {
      		txtName, txtOrt, txtAnzahlGleise,
      		txtLetzteRenovierung, txtZugarten);
      	
-        // Textbereich	
+        // Hier wird der Textbereich zur Anzeige initialisiert
         txtAnzeige.setEditable(false);
-     	txtAnzeige.setLayoutX(400); // Position angepasst
+     	txtAnzeige.setLayoutX(400); 
     	txtAnzeige.setLayoutY(90);
      	txtAnzeige.setPrefWidth(270);
     	txtAnzeige.setPrefHeight(185);
        	pane.getChildren().add(txtAnzeige); 
        	
-        // Buttons
+        // Hier werden Buttons hinzugefügt
         btnEingabe.setLayoutX(20);
         btnEingabe.setLayoutY(290);
-        btnAnzeige.setLayoutX(400); // Position angepasst
+        btnAnzeige.setLayoutX(400); 
         btnAnzeige.setLayoutY(290);
         pane.getChildren().addAll(btnEingabe, btnAnzeige); 
         
- 		// Menu
+ 		// Hier wird das Menü initialisiert
    	    this.mnbrMenuLeiste.getMenus().add(mnDatei);
-  	    this.mnDatei.getItems().add(mnItmCsvImport); // Hinzugefügt
-  	    this.mnDatei.getItems().add(mnItmTxtImport); // Hinzugefügt
-  	    this.mnDatei.getItems().add(new SeparatorMenuItem()); // Hinzugefügt
+        
+        // Hier wird die Liste der Menü-Items vor dem Hinzufügen gelöscht
+        this.mnDatei.getItems().clear(); 
+        
+        // Hier werden die Imports und Exports zum Menü hinzugefügt
+  	    this.mnDatei.getItems().add(mnItmCsvImport); 
+  	    this.mnDatei.getItems().add(mnItmTxtImport); 
+  	    this.mnDatei.getItems().add(new SeparatorMenuItem()); 
   	    this.mnDatei.getItems().add(mnItmCsvExport);
   	    this.mnDatei.getItems().add(mnItmTxtExport);
- 	    pane.getChildren().add(mnbrMenuLeiste);
+ 	    
+        pane.getChildren().add(mnbrMenuLeiste);
    }
     
+    // Hier werden die Listener für die Interaktion initialisiert
     private void initListener() {
 	    btnEingabe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-            	//  Start: Korrektur 
-            	// Übergibt ALLE Textfelder an den Controller
+                // Hier wird die Eingabe an den Control übergeben
         	    control.nehmeBahnhofAuf(
         	    	txtName.getText(), 
         	    	txtOrt.getText(),
@@ -143,71 +147,78 @@ public class BahnhofView {
         	    	txtLetzteRenovierung.getText(),
         	    	txtZugarten.getText()
         	    );
-        	    //  Ende: Korrektur 
             }
 	    });
 	    btnAnzeige.setOnAction(new EventHandler<ActionEvent>() {
 	    	@Override
 	        public void handle(ActionEvent e) {
+                // Hier wird die Methode zur Anzeige des Bahnhofs aufgerufen
 	    		zeigeBahnhofAn();
 	        } 
    	    });
 	    
-	    //  Start: Hinzugefügte Listener 
 	    mnItmCsvImport.setOnAction(new EventHandler<ActionEvent>() {
 	    	@Override
 	        public void handle(ActionEvent e) {
+                // Hier wird der CSV-Import beim Control angefordert
 	       	 	control.leseBahnhofAusDatei("csv");
 	    	}
 	    });
 	    mnItmTxtImport.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent e) {
+                // Hier wird der TXT-Import beim Control angefordert
 		    	control.leseBahnhofAusDatei("txt");
 		    }
     	});
-    	// Ende: Hinzugefügte Listener 
     	
 	    mnItmCsvExport.setOnAction(new EventHandler<ActionEvent>() {
 	    	 @Override
 	    	 public void handle(ActionEvent e) {
+                // Hier wird der CSV-Export angefordert
 	    		 schreibeBahnhofInDatei("csv");
 	    	 }
 	    });
     	 mnItmTxtExport.setOnAction(new EventHandler<ActionEvent>() {
 	    	 @Override
 	    	 public void handle(ActionEvent e) {
+                // Hier wird der TXT-Export angefordert
 	    		 schreibeBahnhofInDatei("txt");
 	    	 }
 	    });
     }
     
-    // public, damit der Controller die Anzeige aktualisieren kann (z.B. nach Import)
+    // Hier wird der aktuell gespeicherte Bahnhof angezeigt
     public void zeigeBahnhofAn(){
     	if(model.getBahnhof() != null){
     		txtAnzeige.setText(
-    			model.getBahnhof().gibBahnhofZurueck(' ')); // ' ' wird ignoriert, siehe Bahnhof.java
+                // Hier wird der Bahnhof aus dem Model geholt und formatiert
+    			model.getBahnhof().gibBahnhofZurueck(' ')); 
     	}
     	else{
+            // Hier wird eine Meldung ausgegeben wenn kein Bahnhof gespeichert ist
     		zeigeInformationsfensterAn("Bisher wurde kein Bahnhof aufgenommen!");
     	}
     }
     
+    // Hier wird ein Informationsfenster angezeigt
     void zeigeInformationsfensterAn(String meldung){
     	new MeldungsfensterAnzeiger(AlertType.INFORMATION,
     		"Information", meldung).zeigeMeldungsfensterAn();
     }	
     
+    // Hier wird ein Fehlermeldungsfenster angezeigt
     void zeigeFehlermeldungsfensterAn(String fehlertyp, String meldung){
        	new MeldungsfensterAnzeiger(AlertType.ERROR,
-        	fehlertyp, meldung).zeigeMeldungsfensterAn(); // Titel vereinfacht
+        	fehlertyp, meldung).zeigeMeldungsfensterAn(); 
     }
     
+    // Hier wird der Export-Aufruf an den Control delegiert
     private void schreibeBahnhofInDatei(String typ) {
-    	 // Aufruf des Controls zum Schreiben
     	try {
 			control.schreibeBahnhofInDatei(typ);
 		} catch (IOException e) {
+            // Hier wird ein Fehler beim Schreiben der Datei an die View übergeben
 			zeigeFehlermeldungsfensterAn("IOException", "Fehler beim Schreiben der Datei: " + e.getMessage());
 		}
     }

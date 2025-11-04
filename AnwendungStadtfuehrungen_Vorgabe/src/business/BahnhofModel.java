@@ -1,10 +1,14 @@
 package business;
 
-import java.io.BufferedReader; // Hinzugefügt
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader; // Hinzugefügt
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+// Importiert die UML-Namen
+import export.Creator;
+import export.CsvConcreteCreator;
+import export.TxtConcreteCreator; 
  
 public class BahnhofModel {
 	
@@ -16,27 +20,44 @@ public class BahnhofModel {
 	
 	public String getUeberschrift()
 	{
-		 return "Verwaltung von Bahnhöfen";
+		 // Hier wird der Fenstertitel auf die korrigierte Schreibweise gesetzt
+		 return "Verwaltung von Bahnhoefen"; 
 	} 
 	
-	// Implementierung für das Schreiben in CSV
+	// Implementierung für das Schreiben in CSV unter Verwendung der Fabrik-Methode
 	public void schreibeBahnhofInCsvDatei() throws IOException
 	{
 		if (this.bahnhof == null) {
             throw new IOException("Kein Bahnhof zum Speichern vorhanden.");
         }
-		// Schreibt in "BahnhoefeAusgabe.csv" (wie in BahnhoefeAnwendungssystem.java)
-		// true = Append-Modus (fügt hinzu)
-		BufferedWriter aus = new BufferedWriter(new FileWriter("BahnhoefeAusgabe.csv", true));
-		// Verwendet die spezielle CSV-Methode aus Bahnhof.java
-		aus.write(this.getBahnhof().gibBahnhofZurueckFuerCsv());
-		aus.newLine(); // Fügt einen Zeilenumbruch nach dem Eintrag hinzu
-		aus.close();
+		
+        // Kreieren eines Creator-Objekts und Abspeicherung mit Hilfe
+        // einer Variablen vom Typ der entsprechenden abstrakten
+        // Creator-Klasse.
+		Creator creator = new CsvConcreteCreator();
+		
+        // Kreieren eines Product-Objekts mit Hilfe der Factory-
+        // Methode des Creator-Objekts und Abspeicherung mit Hilfe
+        // einer Variablen vom Typ der entsprechenden abstrakten
+        // Product-Klasse.
+        // Der Creator übernimmt die Erstellung und Nutzung des Product-Objekts
+		creator.schreibeInDatei(this.bahnhof);
 	}
 	
-	// Implementierung für das Lesen aus CSV
+	// Implementierung für das Schreiben in TXT unter Verwendung der Fabrik-Methode
+	public void schreibeBahnhofInTxtDatei() throws IOException
+	{
+		if (this.bahnhof == null) {
+            throw new IOException("Kein Bahnhof zum Speichern vorhanden.");
+        }
+		
+        // Hier wird die Fabrik für den TXT-Export verwendet
+		Creator creator = new TxtConcreteCreator();
+		creator.schreibeInDatei(this.bahnhof);
+	}
+	
+	// Implementierung für das Lesen aus der CSV-Datei
 	public void leseBahnhofAusCsvDatei() throws IOException, NumberFormatException {
-		// Liest aus "Bahnhof.csv" (wie in BahnhoefeAnwendungssystem.java)
         BufferedReader ein = new BufferedReader(new FileReader("Bahnhof.csv"));
         String zeileStr = ein.readLine();
         if (zeileStr == null) {
@@ -50,16 +71,52 @@ public class BahnhofModel {
             throw new IOException("CSV-Datei hat ein ungültiges Format.");
         }
         
-        // Format erwartet: Name;Ort;AnzahlGleise;LetzteRenovierung;Zugarten(mit _)
         String name = zeile[0];
         String ort = zeile[1];
-        int anzahlGleise = Integer.parseInt(zeile[2]); // Kann NumberFormatException werfen
-        int letzteRenovierung = Integer.parseInt(zeile[3]); // Kann NumberFormatException werfen
-        String[] zugarten = zeile[4].split("_"); // Trennt Zugarten am Unterstrich
+        int anzahlGleise = Integer.parseInt(zeile[2]); 
+        int letzteRenovierung = Integer.parseInt(zeile[3]); 
+        String[] zugarten = zeile[4].split("_"); 
         
-        // Erstellt und setzt den neuen Bahnhof
         this.bahnhof = new Bahnhof(name, ort, anzahlGleise, letzteRenovierung, zugarten);
         ein.close();
+    }
+	
+    // Implementierung für das Lesen aus der TXT-Datei
+    public void leseBahnhofAusTxtDatei() throws IOException, NumberFormatException {
+        BufferedReader ein = new BufferedReader(new FileReader("BahnhoefeAusgabe.txt")); 
+        String line;
+        
+        String name = null;
+        String ort = null;
+        String anzahlGleiseStr = null;
+        String letzteRenovierungStr = null;
+        String zugartenStr = null;
+        
+        while ((line = ein.readLine()) != null) {
+            if (line.trim().isEmpty() || line.contains("---")) {
+                continue; 
+            }
+            if (line.startsWith("Name des Bahnhofs: ")) {
+                name = line.substring("Name des Bahnhofs: ".length()).trim();
+            } else if (line.startsWith("Ort des Bahnhofs: ")) {
+                ort = line.substring("Ort des Bahnhofs: ".length()).trim();
+            } else if (line.startsWith("Anzahl Gleise: ")) {
+                anzahlGleiseStr = line.substring("Anzahl Gleise: ".length()).trim();
+            } else if (line.startsWith("Letzte Renovierung: ")) {
+                letzteRenovierungStr = line.substring("Letzte Renovierung: ".length()).trim();
+            } else if (line.startsWith("Zugarten: ")) {
+                zugartenStr = line.substring("Zugarten: ".length()).trim();
+            }
+        }
+        ein.close();
+        if (name == null || ort == null || anzahlGleiseStr == null || letzteRenovierungStr == null || zugartenStr == null) {
+             throw new IOException("TXT-Datei ist unvollständig oder ungültig formatiert. Fehlende Felder.");
+        }
+        int anzahlGleise = Integer.parseInt(anzahlGleiseStr);
+        int letzteRenovierung = Integer.parseInt(letzteRenovierungStr);
+        String[] zugarten;
+        if (zugartenStr.isEmpty()) { zugarten = new String[]{}; } else { zugarten = zugartenStr.split(" "); }
+        this.bahnhof = new Bahnhof(name, ort, anzahlGleise, letzteRenovierung, zugarten);
     }
 	
 	public Bahnhof getBahnhof()
