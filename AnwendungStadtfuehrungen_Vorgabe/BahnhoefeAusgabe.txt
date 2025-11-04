@@ -68,3 +68,10 @@ Anzahl Gleise: 33
 Letzte Renovierung: 342
 Zugarten: ICE RE
 --------------------------
+--- Daten des Bahnhofs ---
+Name des Bahnhofs: Berlin
+Ort des Bahnhofs: HBF
+Anzahl Gleise: 33
+Letzte Renovierung: 2323
+Zugarten: ICE   RE
+--------------------------

@@ -8,8 +8,9 @@ import java.io.IOException;
 // Importiert die UML-Namen
 import export.Creator;
 import export.CsvConcreteCreator;
-import export.TxtConcreteCreator; 
- 
+import export.TxtConcreteCreator;
+import export.Product; // <--- HINZUGEFÜGT
+
 public class BahnhofModel {
 	
 	private Bahnhof bahnhof;
@@ -25,6 +26,8 @@ public class BahnhofModel {
 	} 
 	
 	// Implementierung für das Schreiben in CSV unter Verwendung der Fabrik-Methode
+    // --- START ANPASSUNG ---
+    // Diese Methode wurde exakt nach den Kommentaren im PDF implementiert.
 	public void schreibeBahnhofInCsvDatei() throws IOException
 	{
 		if (this.bahnhof == null) {
@@ -40,21 +43,34 @@ public class BahnhofModel {
         // Methode des Creator-Objekts und Abspeicherung mit Hilfe
         // einer Variablen vom Typ der entsprechenden abstrakten
         // Product-Klasse.
-        // Der Creator übernimmt die Erstellung und Nutzung des Product-Objekts
-		creator.schreibeInDatei(this.bahnhof);
+		Product product = creator.factoryMethod();
+		
+		// Hier wird das Äquivalent zu "writer.fuegeZeileHinzu(this.freizeitbad);"
+        // und "writer.schliesseDatei();" aufgerufen:
+		product.fuegelnDateiHinzu(this.bahnhof);
+		product.schliesseDatei();
 	}
 	
 	// Implementierung für das Schreiben in TXT unter Verwendung der Fabrik-Methode
+    // Diese Methode wurde analog zur CSV-Methode angepasst,
+    // um der Logik des PDFs zu folgen.
 	public void schreibeBahnhofInTxtDatei() throws IOException
 	{
 		if (this.bahnhof == null) {
             throw new IOException("Kein Bahnhof zum Speichern vorhanden.");
         }
 		
-        // Hier wird die Fabrik für den TXT-Export verwendet
+        // 1. Kreieren eines Creator-Objekts...
 		Creator creator = new TxtConcreteCreator();
-		creator.schreibeInDatei(this.bahnhof);
+        
+        // 2. Kreieren eines Product-Objekts...
+		Product product = creator.factoryMethod();
+		
+        // 3. & 4. Produkt verwenden und schließen
+		product.fuegelnDateiHinzu(this.bahnhof);
+		product.schliesseDatei();
 	}
+    // --- ENDE ANPASSUNG ---
 	
 	// Implementierung für das Lesen aus der CSV-Datei
 	public void leseBahnhofAusCsvDatei() throws IOException, NumberFormatException {

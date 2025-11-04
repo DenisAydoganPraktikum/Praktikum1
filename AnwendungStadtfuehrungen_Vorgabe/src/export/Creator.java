@@ -8,8 +8,12 @@ public abstract class Creator {
 	// Sie gibt ein Objekt vom abstrakten Typ Product zurück
 	public abstract Product factoryMethod() throws IOException;
 	
-	// Diese Hilfsmethode steuert den gesamten Exportprozess
-	// Sie wird im Model aufgerufen und ersetzt die Kommentare
+	
+	// Die folgende Hilfsmethode wurde entfernt, da sie nicht
+    // Teil der Aufgabenstellung im PDF war und die Logik
+    // stattdessen in das BahnhofModel verschoben wurde.
+	
+	/*
 	public void schreibeInDatei(Object object) throws IOException {
 		// Hier wird das konkrete Produkt erzeugt
 		Product product = factoryMethod(); 
@@ -18,4 +22,6 @@ public abstract class Creator {
 		// Hier wird die Datei geschlossen
 		product.schliesseDatei();
 	}
+	*/
+    
 }
