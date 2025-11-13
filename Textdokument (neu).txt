@@ -1,0 +1,53 @@
+Sie haben Bilder von zwei verschiedenen Varianten des Fabrik-Methode-Entwurfsmusters hochgeladen.
+
+Hier ist die Erklärung der beiden Varianten und wie sie sich auf Ihren Code beziehen:
+
+### Variante A (Die "klassische" Fabrik-Methode)
+
+Dieses Diagramm (`image1.jpg`) zeigt die Standard-Implementierung der Fabrik-Methode.
+
+* **Struktur:** Es gibt einen abstrakten `Creator` und mehrere *konkrete* Creator-Klassen (`ConcreteCreatorA`, `ConcreteCreatorB`).
+* **Logik:** Jede konkrete Creator-Klasse ist für die Erstellung von genau einer Art von konkretem Produkt verantwortlich.
+    * `ConcreteCreatorA` erstellt *nur* `ConcreteProductA`.
+    * `ConcreteCreatorB` erstellt *nur* `ConcreteProductB`.
+* **Auswahl:** Die Client-Klasse (bei Ihnen das `BahnhofModel`) entscheidet, welches Produkt sie benötigt, indem sie die *entsprechende Creator-Klasse instanziiert*.
+
+**Verbindung zu Ihrem Code:**
+**Ihre Implementierung ist eine exakte Umsetzung von Variante A.**
+
+* `Creator` (abstrakt) -> `export.Creator`
+* `Product` (abstrakt) -> `export.Product`
+* `ConcreteCreatorA` -> `export.CsvConcreteCreator`
+* `ConcreteProductA` -> `export.CsvConcreteProduct`
+* `ConcreteCreatorB` -> `export.TxtConcreteCreator`
+* `ConcreteProductB` -> `export.TxtConcreteProduct`
+
+Ihr `BahnhofModel` wählt das Produkt, indem es den Creator auswählt:
+`Creator creator = new CsvConcreteCreator();` (um ein CSV-Produkt zu erhalten)
+oder
+`Creator creator = new TxtConcreteCreator();` (um ein TXT-Produkt zu erhalten)
+
+---
+
+### Variante B (Die "parameterisierte" Fabrik-Methode)
+
+Dieses Diagramm (`image0.jpg`) zeigt eine gängige Abwandlung.
+
+* **Struktur:** Es gibt nur *eine* konkrete Creator-Klasse (`ConcreteCreatorAB`).
+* **Logik:** Diese eine Creator-Klasse kann *mehrere* verschiedene Produkte erstellen.
+* **Auswahl:** Um zu entscheiden, welches Produkt erstellt werden soll, erhält die `factoryMethod` einen **Parameter** (im Diagramm `typ:String`). Innerhalb dieser Methode gibt es eine Logik (z. B. ein `if/else` oder `switch`), die basierend auf dem Parameter das entsprechende Produkt zurückgibt.
+    * `factoryMethod("A")` würde `new ConcreteProductA` zurückgeben.
+    * `factoryMethod("B")` würde `new ConcreteProductB` zurückgeben.
+
+---
+
+### Hauptunterschied
+
+Der wesentliche Unterschied liegt darin, **wie** das zu erstellende Produkt ausgewählt wird:
+
+| Variante | Wie wird das Produkt ausgewählt? |
+| :--- | :--- |
+| **Variante A (Ihr Code)** | Durch die Wahl der **konkreten Creator-Klasse** (z.B. `new CsvConcreteCreator()`). |
+| **Variante B** | Durch Übergabe eines **Parameters** an die `factoryMethod` (z.B. `creator.factoryMethod("csv")`). |
+
+Sie haben die klassische und oft bevorzugte Variante A implementiert, die dem "Open/Closed-Prinzip" besser folgt: Wenn Sie einen neuen Export-Typ (z.B. XML) hinzufügen müssten, würden Sie einfach `XmlConcreteCreator` und `XmlConcreteProduct` hinzufügen, ohne die bestehenden Creator-Klassen ändern zu müssen.
