@@ -51,3 +51,193 @@ Der wesentliche Unterschied liegt darin, **wie** das zu erstellende Produkt ausg
 | **Variante B** | Durch Übergabe eines **Parameters** an die `factoryMethod` (z.B. `creator.factoryMethod("csv")`). |
 
 Sie haben die klassische und oft bevorzugte Variante A implementiert, die dem "Open/Closed-Prinzip" besser folgt: Wenn Sie einen neuen Export-Typ (z.B. XML) hinzufügen müssten, würden Sie einfach `XmlConcreteCreator` und `XmlConcreteProduct` hinzufügen, ohne die bestehenden Creator-Klassen ändern zu müssen.
+
+
+
+
+
+Um die gesamte Klasse zu überarbeiten, wie Sie es verlangt haben, muss ich annehmen, dass Sie die **`Modell`**-Klasse sowie die **`Creator`**- und **`Produkt`**-Klassen in einer kohärenten Struktur basierend auf dem **Fabrik-Methode-Muster (Variante A)** sehen möchten.
+
+Ich werde hier die minimale Struktur für den **CSV-Import** bereitstellen und die Erweiterung für den **TXT-Import** (wie im letzten Satz der Aufgabe gefordert) vorbereiten.
+
+-----
+
+## 🏗️ Struktur des Fabrik-Methode-Musters
+
+Das Fabrik-Methode-Muster benötigt mindestens vier Komponenten:
+
+### 1\. 🏭 Abstraktes Produkt
+
+Die Basisklasse für die zu erstellenden Objekte (z.B. `Buergeramt`).
+
+```java
+// Product.java
+public abstract class Produkt {
+    // Gemeinsame Methoden/Attribute für alle Produkte (Buergeramt, Bahnhof etc.)
+    public abstract String getDetails();
+}
+
+// Buergeramt.java (Konkretes Produkt)
+public class Buergeramt extends Produkt {
+    private String name;
+    private float wert1;
+    private float wert2;
+    private String info;
+    private String[] adressDetails;
+
+    // Konstruktor, der die geparsten CSV-Teile verarbeitet
+    public Buergeramt(String name, float w1, float w2, String info, String[] adr) {
+        this.name = name;
+        this.wert1 = w1;
+        this.wert2 = w2;
+        this.info = info;
+        this.adressDetails = adr;
+    }
+
+    @Override
+    public String getDetails() {
+        return "Buergeramt: " + name + " an Adresse: " + String.join(", ", adressDetails);
+    }
+}
+```
+
+-----
+
+### 2\. 🧱 Abstrakter Creator
+
+Definiert die Fabrikmethode (`erzeugeProdukt`) und die Implementierung der Hauptlogik (`liesAusDatei`), die die Fabrikmethode verwendet.
+
+```java
+// Creator.java (Entspricht Reader/CreatorNachname aus dem Bild)
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public abstract class Creator {
+    
+    // Die abstrakte Fabrikmethode: Wird von Unterklassen implementiert, 
+    // um ein konkretes Produkt zu liefern.
+    protected abstract Produkt erzeugeProdukt(String zeile) throws IOException;
+
+    /**
+     * Die Hauptmethode: Liest die Datei und ruft die Fabrikmethode auf.
+     */
+    public Produkt liesAusDatei(String dateiPfad) throws IOException {
+        Produkt erzeugtesProdukt = null;
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(dateiPfad))) {
+            String zeile = reader.readLine(); 
+            
+            if (zeile != null) {
+                // Aufruf der spezifischen Fabrikmethode der Unterklasse
+                erzeugtesProdukt = erzeugeProdukt(zeile);
+            }
+        } catch (IOException e) {
+            throw new IOException("Fehler beim Lesen der Datei: " + e.getMessage());
+        }
+        
+        return erzeugtesProdukt;
+    }
+}
+```
+
+-----
+
+### 3\. ⚙️ Konkreter Creator (CSV)
+
+Implementiert die Fabrikmethode, um das spezifische **`Buergeramt`**-Produkt zu erzeugen, indem es die geparste Zeile verwendet (wie im Code-Snippet aus dem Bild gezeigt).
+
+```java
+// CsvConcreteCreator.java
+import java.io.IOException;
+
+public class CsvConcreteCreator extends Creator {
+
+    // Implementierung der Fabrikmethode für CSV-Daten
+    @Override
+    protected Produkt erzeugeProdukt(String zeile) throws IOException {
+        if (zeile == null || zeile.isEmpty()) {
+            throw new IOException("Leere Zeile im CSV.");
+        }
+        
+        // Parsing-Logik aus dem Bild-Snippet
+        // String[] teile = zeile.split(";_"); // Angenommenes Trennzeichen
+        String[] teile = zeile.split(","); // Oftmals ein Komma
+        
+        if (teile.length < 5) {
+            throw new IOException("Zu wenige Felder in der CSV-Zeile.");
+        }
+        
+        // Die eigentliche Objekterzeugung (Produkt-Instanziierung)
+        Buergeramt neuesBuergeramt = new Buergeramt(
+            teile[0], // name
+            Float.parseFloat(teile[1]), // wert1
+            Float.parseFloat(teile[2]), // wert2
+            teile[3], // info
+            teile[4].split("-_") // adressDetails (Split wie im Bild)
+        );
+        
+        return neuesBuergeramt;
+    }
+}
+```
+
+-----
+
+### 4\. 🏢 Die Client-Klasse (`Modell`)
+
+Die Klasse, die den konkreten Creator instanziiert und ihn zur Erstellung des Produkts verwendet, um die Kommentare aus dem Bild zu erfüllen.
+
+```java
+// Modell.java
+import java.io.IOException;
+
+public class Modell {
+    
+    private Buergeramt buergeramt;
+    private Creator creator; // Speichert das Creator-Objekt
+
+    /**
+     * Implementierung der Methode zur Lösung der Aufgabe:
+     * Liest das Buergeramt aus einer CSV-Datei unter Verwendung des Fabrik-Musters.
+     */
+    public void leseBuergeramtAusCsvDatei(String dateiPfad) throws IOException {
+        
+        // 1. Kreieren eines Creator-Objekts (CsvConcreteCreator)
+        //    Abspeicherung mit Hilfe einer Variablen vom Typ des abstrakten Creator.
+        this.creator = new CsvConcreteCreator(); 
+
+        // Die liesAusDatei() Methode des Creators führt das Lesen und die 
+        // Objekterzeugung (Fabrikmethode) durch und gibt das abstrakte Produkt zurück.
+        Produkt erzeugtesProdukt = this.creator.liesAusDatei(dateiPfad); 
+
+        // 2. Kreieren/Speichern eines PRODUKT-Objekts (Buergeramt) 
+        //    mit Hilfe einer Variablen vom Typ des entsprechenden abstrakten Produkt-Klasse.
+        if (erzeugtesProdukt instanceof Buergeramt) {
+            this.buergeramt = (Buergeramt) erzeugtesProdukt;
+            System.out.println("Import erfolgreich: " + this.buergeramt.getDetails());
+        } else {
+            throw new IOException("Fehler: Creator hat kein Buergeramt-Produkt geliefert.");
+        }
+    }
+    
+    // --- Erweiterung für TXT-Import (gemäß letzter Anweisung im Bild) ---
+    
+    /**
+     * Implementiert den TXT-Import unter Verwendung des Fabrik-Methode-Musters.
+     * Es müsste hierfür ein TxtConcreteCreator existieren.
+     */
+    public void leseBuergeramtAusTxtDatei(String dateiPfad) throws IOException {
+        // Dies würde eine neue Klasse TxtConcreteCreator benötigen, die die 
+        // spezifische Txt-Parsing-Logik implementiert (z.B. andere Trennzeichen).
+        // this.creator = new TxtConcreteCreator(); 
+        
+        // ... (restliche Logik wie oben)
+    }
+    
+    public Buergeramt getBuergeramt() {
+        return buergeramt;
+    }
+}
+```
+
