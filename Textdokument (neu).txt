@@ -299,3 +299,80 @@ Alle relevanten Klassen (`ReaderProductNachname`, `ReaderCreatorNachname`, `Buer
 
 
 
+
+
+
+
+
+Die **Variante A** des Fabrik-Methode-Musters im UML-Diagramm (wie Sie es möglicherweise in Ihrem Kontext gesehen haben) beinhaltet die Unterscheidung durch die **konkrete Creator-Klasse**.
+
+Hier ist die **Implementierung der `leseBuergeramtAusCsvDatei()`-Methode** in der `Modell`-Klasse, die genau diesem Muster folgt, indem sie einen **konkreten Creator** instanziiert, um das Produkt zu erhalten.
+
+-----
+
+## 💻 Implementierung der `Modell`-Klasse (Variante A)
+
+Basierend auf dem Muster wird das gewünschte Produkt (z.B. `Buergeramt`) durch die **Auswahl der richtigen Creator-Klasse** (`CsvConcreteCreator`) bestimmt. Die Schritte im Code erfüllen die Kommentare im Bild.
+
+**Annahmen zur Klassenstruktur:**
+
+  * `Creator` (abstrakt) und `Produkt` (abstrakt) sind definiert.
+  * `CsvConcreteCreator` ist ein **konkreter Creator**, der `Buergeramt`-Objekte erzeugt.
+  * `liesAusDatei(String dateiPfad)` ist die Methode im `Creator`, die die Datei öffnet und die interne Fabrikmethode aufruft.
+
+<!-- end list -->
+
+```java
+import java.io.IOException;
+
+public class Modell {
+    
+    // Angenommene Instanzvariable zur Speicherung des erzeugten Produkts
+    private Buergeramt buergeramt;
+    
+    // Angenommene Instanzvariable zur Speicherung des Creators, wie im Kommentar gefordert
+    private Creator creator; 
+
+    /**
+     * Liest die Daten des Buergeramts aus einer CSV-Datei.
+     * Nutzt das Fabrik-Methode-Muster (Variante A): 
+     * Die Produktauswahl erfolgt über die Wahl des Creators.
+     */
+    public void leseBuergeramtAusCsvDatei(String dateiPfad) throws IOException {
+        
+        // // Kreieren eines Creator-Objekts und Abspeicherung mit Hilfe
+        // // einer Variablen vom Typ des entsprechenden abstrakten 
+        // // Creator-Klasse.
+        // --> Wahl des Creators bestimmt das Produkt: CSV-Creator für Buergeramt
+        this.creator = new CsvConcreteCreator(); 
+
+        // // Kreieren eines PRODUKT-Objekts mit Hilfe der FACTORY-
+        // // Methode des Creator-Objekts und Abspeicherung mit Hilfe 
+        // // einer Variablen vom Typ der entsprechenden abstrakten 
+        // // Produkt-Klasse.
+        
+        // Die liesAusDatei()-Methode führt die gesamte Lese- und Parsing-Logik aus
+        // und liefert das fertige, abstrakte Produkt-Objekt zurück.
+        Produkt erzeugtesProdukt = this.creator.liesAusDatei(dateiPfad); 
+
+        // Abspeicherung des Produkts in der spezifischen Variable
+        if (erzeugtesProdukt instanceof Buergeramt) {
+            this.buergeramt = (Buergeramt) erzeugtesProdukt;
+            System.out.println("Buergeramt erfolgreich aus CSV importiert.");
+        } else {
+            throw new IOException("Falsches Produktformat aus der Datei erhalten.");
+        }
+    }
+    
+    // ... weitere Methoden des Modells
+}
+```
+
+### Kurze Erklärung zur Fabrikmethode
+
+Im Sinne der **Variante A** befindet sich die *konkrete* Logik zur Erzeugung des `Buergeramt`-Objekts, inklusive des Parsings der Zeile (`teile[0]`, `Float.parseFloat(teile[1])` usw.), **innerhalb des `CsvConcreteCreator`**.
+
+Die `Modell`-Klasse **kennt nicht**, wie das `Buergeramt` genau erstellt wird (sie delegiert diese Verantwortung an den `Creator`) und erfüllt damit die Entkopplung des Fabrik-Musters.
+
+
+
