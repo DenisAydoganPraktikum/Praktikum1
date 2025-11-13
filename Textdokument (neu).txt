@@ -241,3 +241,61 @@ public class Modell {
 }
 ```
 
+
+Die vorherige Überarbeitung hat die gesamte Struktur des **Fabrik-Methode-Musters** inklusive der Namensanpassungen und der Implementierung für **CSV** und **TXT** bereits abgedeckt.
+
+Hier ist eine kurze Zusammenfassung der wichtigsten Anpassungen der Namen und Klassen, basierend auf der Anforderung im Bild:
+
+-----
+
+## 🔑 Namensanpassungen und Struktur
+
+| Komponente | Allgemeine Bezeichnung | Angepasste Klasse (nach Vorgabe) | Funktion |
+| :--- | :--- | :--- | :--- |
+| **Abstraktes Produkt** | `Produkt` | `ReaderProductNachname` | Die Basisklasse für das zu erstellende Objekt (`Buergeramt`). |
+| **Abstrakter Creator** | `Creator` | `ReaderCreatorNachname` | Die Basisklasse für Reader/Exporter. Enthält die abstrakte **Fabrikmethode** (`erzeugeProdukt`). |
+| **Konkreter Creator (CSV)** | `ConcreteCreator` | `CsvConcreteCreator` | Implementiert die Logik zum Parsen von CSV-Dateien und liefert ein `Buergeramt`. |
+| **Konkreter Creator (TXT)** | `ConcreteCreator` | `TxtConcreteCreator` | Implementiert die Logik zum Parsen der spezifischen TXT-Datei und liefert ein `Buergeramt`. |
+
+-----
+
+## 💻 Beispiel: Die Methode in der `Modell`-Klasse
+
+Die überarbeitete Methode **`leseBuergeramtAusCsvDatei`** in der **`Modell`**-Klasse verwendet nun die angepassten abstrakten Namen, um die Anforderungen aus den Kommentaren zu erfüllen:
+
+```java
+public class Modell {
+    
+    // ... Variablen für das Produkt und den Creator vom abstrakten Typ
+    private ReaderCreatorNachname creator;
+    private ReaderProductNachname produkt; 
+    private Buergeramt buergeramt; 
+
+    public void leseBuergeramtAusCsvDatei(String dateiPfad) throws IOException {
+        
+        // 1. Kreieren eines Creator-Objekts und Abspeicherung mit Hilfe
+        //    einer Variablen vom Typ des entsprechenden abstrakten Creator-Klasse.
+        this.creator = new CsvConcreteCreator(); 
+
+        // 2. Kreieren eines PRODUKT-Objekts mit Hilfe der FACTORY-
+        //    Methode des Creator-Objekts und Abspeicherung mit Hilfe 
+        //    einer Variablen vom Typ der entsprechenden abstrakten Product-Klasse.
+        this.produkt = this.creator.liesAusDatei(dateiPfad); 
+
+        // Speichern des Produkts in der konkreten Variablen
+        if (this.produkt instanceof Buergeramt) {
+            this.buergeramt = (Buergeramt) this.produkt;
+        } else {
+            throw new IOException("Falsches Produktformat erhalten.");
+        }
+        // ... Logik zur Datei/Reader-Schließung, die nun im Creator liegt.
+    }
+    
+    // ... Die Methode leseBuergeramtAusTxtDatei würde analog den TxtConcreteCreator instanziieren.
+}
+```
+
+Alle relevanten Klassen (`ReaderProductNachname`, `ReaderCreatorNachname`, `Buergeramt`, `CsvConcreteCreator`, `TxtConcreteCreator`, `Modell`) sind in der vorherigen Antwort vollständig und mit angepassten Namen dargestellt.
+
+
+
